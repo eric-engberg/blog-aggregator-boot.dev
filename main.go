@@ -1,9 +1,9 @@
 package main
 
 import (
+	"database/sql"
 	"log"
 	"os"
-	"database/sql"
 
 	"github.com/eric-engberg/blog-aggregator-boot.dev/internal/config"
 	"github.com/eric-engberg/blog-aggregator-boot.dev/internal/database"
@@ -11,7 +11,7 @@ import (
 )
 
 type state struct {
-	db *database.Queries
+	db  *database.Queries
 	cfg *config.Config
 }
 
@@ -30,6 +30,7 @@ func main() {
 	commands.register("register", handlerRegister)
 	commands.register("reset", handlerReset)
 	commands.register("users", handlerUsers)
+	commands.register("agg", handlerAgg)
 
 	if err != nil {
 		log.Fatalf("error reading config: %v", err)
