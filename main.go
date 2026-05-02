@@ -17,6 +17,9 @@ type state struct {
 
 func main() {
 	cfg, err := config.Read()
+	if err != nil {
+		log.Fatalf("error reading config: %v", err)
+	}
 
 	programState := &state{
 		cfg: &cfg,
@@ -31,10 +34,11 @@ func main() {
 	commands.register("reset", handlerReset)
 	commands.register("users", handlerUsers)
 	commands.register("agg", handlerAgg)
-
-	if err != nil {
-		log.Fatalf("error reading config: %v", err)
-	}
+	commands.register("addfeed", middlewareLoggedIn(handlerAddFeed))
+	commands.register("feeds", handlerFeeds)
+	commands.register("follow", middlewareLoggedIn(handlerFollow))
+	commands.register("following", middlewareLoggedIn(handlerFollowing))
+	commands.register("unfollow", middlewareLoggedIn(handlerUnfollow))
 
 	if len(os.Args) < 2 {
 		log.Fatal("Usage: cli <command> [args...]")
